@@ -5,12 +5,10 @@ const Page = db.define("page", {
   title: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   slug: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   content: {
     type: Sequelize.TEXT,
@@ -21,16 +19,19 @@ const Page = db.define("page", {
   },
 });
 
+Page.beforeValidate((pageInstance) => {
+  const title = pageInstance.title;
+  pageInstance.slug = title.replace(/\s+/g, "_").replace(/\W/g, "");
+});
+
 const User = db.define("user", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   email: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
     validate: { isEmail: true },
   },
 });
